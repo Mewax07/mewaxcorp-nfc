@@ -1,11 +1,55 @@
 package org.mewaxcorp.nfc;
 
-import android.util.Log;
+import android.nfc.NfcAdapter;
 
-public class NfcPlugin {
+import com.getcapacitor.JSObject;
+import com.getcapacitor.Plugin;
+import com.getcapacitor.PluginCall;
+import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
 
-    public String echo(String value) {
-        Log.i("Echo", value);
-        return value;
+@CapacitorPlugin(name = "Nfc")
+public class NfcPlugin extends Plugin {
+    private static final String TAG = "Nfc";
+    private NfcAdapter mNfcAdapter;
+    private PluginCall mCall;
+
+    @Override
+    public void load() {
+        super.load();
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(getContext());
+    }
+
+    @PluginMethod
+    public void isEnabled(PluginCall call) {
+        boolean isEnabled = mNfcAdapter != null && mNfcAdapter.isEnabled();
+        JSObject ret = new JSObject();
+        ret.put("isEnabled", isEnabled);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void enable(PluginCall call) {
+        mCall = call;
+        if (mNfcAdapter != null) {
+            mNfcAdapter.enableReaderMode(
+                getActivity(),
+                new NfcReaderCallback(this),
+                NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK,
+                null
+            );
+            call.resolve();
+        } else {
+            call.reject("NFC adapter not available");
+        }
+    }
+
+
+    @PluginMethod
+    public void disable(PluginCall call) {
+        if (mNfcAdapter!= null) {
+            mNfcAdapter.disableReaderMode(getActivity());
+        }
+        call.resolve();
     }
 }

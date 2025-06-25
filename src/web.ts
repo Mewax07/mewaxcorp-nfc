@@ -1,10 +1,26 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { NfcPluginPlugin } from './definitions';
+import type { NfcPlugin } from './definitions';
 
-export class NfcPluginWeb extends WebPlugin implements NfcPluginPlugin {
-  async echo(options: { value: string }): Promise<{ value: string }> {
-    console.log('ECHO', options);
-    return options;
+export class NfcPluginWeb extends WebPlugin implements NfcPlugin {
+  async isEnabled(): Promise<boolean> {
+    const supported = 'NDEFReader' in window;
+    return supported;
+  }
+
+  async enable(): Promise<void> {
+    if (!('NDEFReader' in window)) {
+      throw new Error('NDEFReader is not supported');
+    }
+    const reader = new (window as any).NDEFReader();
+    await reader.scan();
+  }
+
+  async disable(): Promise<void> {
+    if (!('NDEFReader' in window)) {
+      throw new Error('NDEFReader is not supported');
+    }
+    const reader = new (window as any).NDEFReader();
+    await reader.cancel();
   }
 }

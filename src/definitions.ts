@@ -1,3 +1,6 @@
-export interface NfcPluginPlugin {
-  echo(options: { value: string }): Promise<{ value: string }>;
+export interface NfcPlugin {
+  isEnabled(): Promise<boolean>;
+
+  enable(): Promise<void>;
+  disable(): Promise<void>;
 }
