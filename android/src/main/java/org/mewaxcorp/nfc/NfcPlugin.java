@@ -31,19 +31,10 @@ public class NfcPlugin extends Plugin {
     @PluginMethod
     public void enable(PluginCall call) {
         mCall = call;
-        if (mNfcAdapter != null) {
-            mNfcAdapter.enableReaderMode(
-                getActivity(),
-                new NfcReaderCallback(this),
-                NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK,
-                null
-            );
-            call.resolve();
-        } else {
-            call.reject("NFC adapter not available");
-        }
+        // if (mNfcAdapter != null) {
+        //     mNfcAdapter.enableReaderMode(getActivity(), new NfcReaderCallback(this), NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK, null);
+        // }
     }
-
 
     @PluginMethod
     public void disable(PluginCall call) {

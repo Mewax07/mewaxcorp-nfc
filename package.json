@@ -1,6 +1,6 @@
 {
   "name": "mewaxcorp-nfc",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Add NFC feature for capacitor js 7.x.x",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
